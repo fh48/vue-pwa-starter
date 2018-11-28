@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 // see http://vuejs-templates.github.io/webpack for documentation.
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   build: {
@@ -25,7 +25,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8081,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -37,4 +37,4 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
   }
-}
+};
