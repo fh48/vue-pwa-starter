@@ -26,7 +26,6 @@
               placeholder="Year"
               :options="yearOptions"
               v-model="yearValue"
-              @input="input"
             />
 
             <Input
@@ -34,7 +33,14 @@
               validation="required"
               :options="churchtaxOptions"
               v-model="isInChurch"
-              @input="input"
+            />
+
+            <Input
+              v-if="isInChurch.value"
+              label="State of Residence"
+              validation="required"
+              :options="stateOptions"
+              v-model="stateOfResidence"
             />
 
             <b-button
@@ -65,24 +71,36 @@ export default {
       inputValue: "",
       yearValue: "",
       isInChurch: "",
+      stateOfResidence: "",
       churchtaxOptions: [
         { label: "Yes", value: true },
         { label: "No", value: false }
       ],
-      yearOptions: ["2018"]
+      yearOptions: ["2018"],
+      stateOptions: [
+        { label: "Bayern", value: "Bayern" },
+        {
+          label: "BadenWuerttemberg",
+          value: "BaWue"
+        },
+        { label: "Other", value: "Other" }
+      ]
     };
   },
   computed: {
     isEnabled: function() {
-      return this.inputValue && this.yearValue && this.isInChurch;
+      return (
+        this.inputValue &&
+        this.yearValue &&
+        this.isInChurch &&
+        this.stateOfResidence
+      );
     }
   },
   methods: {
     input: function(input) {
       if (input.type === "input") {
         this.inputValue = input.value;
-      } else if (input.type === "dropdown") {
-        this.yearValue = input.value;
       }
     },
     handleSubmit: function(submitEvent) {

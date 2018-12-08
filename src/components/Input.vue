@@ -73,7 +73,7 @@ export default {
       const { valid, errors } = await this.validate(value);
       if (valid) {
         this.validationError = "";
-        this.$emit("input", { type: this.inputType, value });
+        this.$emit("input", value);
       } else {
         this.validationError = errors[0];
         this.$emit("input", "");
