@@ -20,6 +20,9 @@ export default {
 <style lang="scss">
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "../node_modules/bootstrap-vue/dist/bootstrap-vue.css";
+
+@import "../node_modules/animate.css/animate.min.css";
+
 body {
   margin: 0;
   background: $lightShades;
@@ -27,6 +30,13 @@ body {
 
 h2 {
   font-size: 2rem;
+}
+
+button,
+input {
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25) !important;
+  }
 }
 
 #app {
