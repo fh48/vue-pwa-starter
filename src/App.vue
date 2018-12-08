@@ -32,8 +32,7 @@ h2 {
   font-size: 2rem;
 }
 
-button,
-input {
+button {
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba($primary, 0.25) !important;
   }

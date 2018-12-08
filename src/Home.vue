@@ -20,8 +20,17 @@
               @input="input"
             />
 
+            <Input
+              label="Year"
+              validation="required|numeric"
+              placeholder="Year"
+              options="['2018']"
+              v-model="yearValue"
+              @input="input"
+            />
+
             <b-button
-              class="btn"
+              class="submit-btn mt-3"
               type="submit"
               variant="darkShades"
               size="lg"
@@ -45,12 +54,22 @@ export default {
   components: { Panel, Input },
   data() {
     return {
-      inputValue: ""
+      inputValue: "",
+      yearValue: ""
     };
   },
+  computed: {
+    isEnabled: function() {
+      return this.inputValue && this.yearValue;
+    }
+  },
   methods: {
-    input: function(inputValue) {
-      this.inputValue = inputValue;
+    input: function(input) {
+      if (input.type === "input") {
+        this.inputValue = input.value;
+      } else if (input.type === "dropdown") {
+        this.yearValue = input.value;
+      }
     },
     handleSubmit: function(submitEvent) {
       console.log("This is our raw data:", this.inputValue);
@@ -64,10 +83,10 @@ export default {
   padding: 0 15px;
 }
 
-.btn {
+.submit-btn {
   font-weight: bold;
   margin: 5px;
-  margin-top: 25px;
+  margin-top: 35px;
 }
 </style>
 

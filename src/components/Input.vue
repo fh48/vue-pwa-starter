@@ -2,6 +2,7 @@
   <div class="input-wrapper">
     <label>{{label}}</label>
     <b-form-input
+      v-if="inputType==='input'"
       class="input"
       autocomplete="off"
       :name="name"
@@ -10,7 +11,14 @@
       type="text"
       size="lg"
     />
-
+    <v-select
+      v-if="inputType==='dropdown'"
+      class="input-dropdown"
+      @input="input"
+      :options="['2018']"
+      :placeholder="placeholder"
+      :name="name"
+    />
     <transition
       name="alert-in"
       enter-active-class="animated flipInX"
@@ -37,7 +45,9 @@ export default {
     label: String,
     value: String,
     validation: String,
-    placeholder: String
+    placeholder: String,
+    options: String,
+    year: Number
   },
   data() {
     return {
@@ -47,6 +57,9 @@ export default {
   computed: {
     name: function() {
       return this.label.replace(/\s/g, "");
+    },
+    inputType: function() {
+      return this.options ? "dropdown" : "input";
     }
   },
   methods: {
@@ -57,10 +70,11 @@ export default {
     },
 
     async input(value) {
+      console.log("value", value);
       const { valid, errors } = await this.validate(value);
       if (valid) {
         this.validationError = "";
-        this.$emit("input", value);
+        this.$emit("input", { type: this.inputType, value });
       } else {
         this.validationError = errors[0];
         this.$emit("input", "");
@@ -73,7 +87,23 @@ export default {
 <style lang="scss" scoped>
 .input-wrapper {
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  label {
+    margin: 5px 0;
+  }
+}
+
+.v-select {
+  width: 100%;
+  height: calc(2.875rem + 2px);
+  background: white;
+  border-radius: 3px;
+  font-size: 1.25rem;
+}
+
+.v-select ::after {
+  border-left: 0;
+  border-right: 0;
 }
 
 .alert {
