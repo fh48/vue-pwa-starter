@@ -24,8 +24,16 @@
               label="Year"
               validation="required|numeric"
               placeholder="Year"
-              options="['2018']"
+              :options="yearOptions"
               v-model="yearValue"
+              @input="input"
+            />
+
+            <Input
+              label="Church Tax"
+              validation="required"
+              :options="churchtaxOptions"
+              v-model="isInChurch"
               @input="input"
             />
 
@@ -55,12 +63,18 @@ export default {
   data() {
     return {
       inputValue: "",
-      yearValue: ""
+      yearValue: "",
+      isInChurch: "",
+      churchtaxOptions: [
+        { label: "Yes", value: true },
+        { label: "No", value: false }
+      ],
+      yearOptions: ["2018"]
     };
   },
   computed: {
     isEnabled: function() {
-      return this.inputValue && this.yearValue;
+      return this.inputValue && this.yearValue && this.isInChurch;
     }
   },
   methods: {

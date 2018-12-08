@@ -15,7 +15,7 @@
       v-if="inputType==='dropdown'"
       class="input-dropdown"
       @input="input"
-      :options="['2018']"
+      :options="options"
       :placeholder="placeholder"
       :name="name"
     />
@@ -43,10 +43,10 @@ export default {
   name: "Input",
   props: {
     label: String,
-    value: String,
+    value: String | Number | Object,
     validation: String,
     placeholder: String,
-    options: String,
+    options: Array,
     year: Number
   },
   data() {
@@ -70,7 +70,6 @@ export default {
     },
 
     async input(value) {
-      console.log("value", value);
       const { valid, errors } = await this.validate(value);
       if (valid) {
         this.validationError = "";
