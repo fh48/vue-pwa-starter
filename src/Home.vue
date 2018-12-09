@@ -14,33 +14,44 @@
         >
           <form @submit.prevent="handleSubmit">
             <Input
+              type="input"
               label="Net Income"
               validation="required|numeric"
-              v-model="inputValue"
+              v-model="inputs.incomeValue"
               @input="input"
             />
 
             <Input
+              type="dropdown"
               label="Year"
               validation="required|numeric"
-              placeholder="Year"
               :options="yearOptions"
-              v-model="yearValue"
+              v-model="inputs.yearValue"
             />
 
             <Input
+              type="dropdown"
               label="Church Tax"
               validation="required"
               :options="churchtaxOptions"
-              v-model="isInChurch"
+              v-model="inputs.isInChurch"
             />
 
             <Input
-              v-if="isInChurch.value"
+              type="dropdown"
+              v-if="inputs.isInChurch.value"
               label="State of Residence"
               validation="required"
               :options="stateOptions"
-              v-model="stateOfResidence"
+              v-model="inputs.stateOfResidence"
+            />
+
+            <Input
+              type="radio"
+              label="Personal Relationship"
+              validation="required"
+              :options="relationshipOptions"
+              v-model="inputs.relationship"
             />
 
             <b-button
@@ -48,7 +59,7 @@
               type="submit"
               variant="darkShades"
               size="lg"
-              :disabled="!inputValue"
+              :disabled="!isEnabled"
             >
               Calculate!
             </b-button>
@@ -68,10 +79,14 @@ export default {
   components: { Panel, Input },
   data() {
     return {
-      inputValue: "",
-      yearValue: "",
-      isInChurch: "",
-      stateOfResidence: "",
+      inputs: {
+        incomeValue: "",
+        yearValue: "",
+        isInChurch: "",
+        stateOfResidence: "",
+        relationship: ""
+      },
+
       churchtaxOptions: [
         { label: "Yes", value: true },
         { label: "No", value: false }
@@ -84,27 +99,26 @@ export default {
           value: "BaWue"
         },
         { label: "Other", value: "Other" }
+      ],
+      relationshipOptions: [
+        { text: "married", value: "married" },
+        { text: "single", value: "single" }
       ]
     };
   },
   computed: {
     isEnabled: function() {
-      return (
-        this.inputValue &&
-        this.yearValue &&
-        this.isInChurch &&
-        this.stateOfResidence
-      );
+      return !!Object.values(this.inputs).every(Boolean);
     }
   },
   methods: {
     input: function(input) {
       if (input.type === "input") {
-        this.inputValue = input.value;
+        this.incomeValue = input.value;
       }
     },
     handleSubmit: function(submitEvent) {
-      console.log("This is our raw data:", this.inputValue);
+      console.log("This is our raw data:", this.inputs);
     }
   }
 };

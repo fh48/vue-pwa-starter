@@ -2,7 +2,7 @@
   <div class="input-wrapper">
     <label>{{label}}</label>
     <b-form-input
-      v-if="inputType==='input'"
+      v-if="type==='input'"
       class="input"
       autocomplete="off"
       :name="name"
@@ -12,13 +12,21 @@
       size="lg"
     />
     <v-select
-      v-if="inputType==='dropdown'"
+      v-if="type ==='dropdown'"
       class="input-dropdown"
       @input="input"
       :options="options"
       :placeholder="placeholder"
       :name="name"
     />
+    <b-form-group v-if="type==='radio'">
+      <b-form-radio-group
+        :type="type"
+        @input="input"
+        :options="options"
+        :name="name"
+      />
+    </b-form-group>
     <transition
       name="alert-in"
       enter-active-class="animated flipInX"
@@ -42,6 +50,7 @@ const v = new Validator();
 export default {
   name: "Input",
   props: {
+    type: String,
     label: String,
     value: String | Number | Object,
     validation: String,
@@ -57,9 +66,6 @@ export default {
   computed: {
     name: function() {
       return this.label.replace(/\s/g, "");
-    },
-    inputType: function() {
-      return this.options ? "dropdown" : "input";
     }
   },
   methods: {
