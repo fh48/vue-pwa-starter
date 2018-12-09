@@ -12,59 +12,7 @@
           class="form-body"
           slot="body"
         >
-          <form @submit.prevent="handleSubmit">
-            <Input
-              type="input"
-              label="Net Income"
-              validation="required|numeric"
-              v-model="inputs.incomeValue"
-              @input="input"
-            />
-
-            <Input
-              type="dropdown"
-              label="Year"
-              validation="required|numeric"
-              :options="yearOptions"
-              v-model="inputs.yearValue"
-            />
-
-            <Input
-              type="dropdown"
-              label="Church Tax"
-              validation="required"
-              :options="churchtaxOptions"
-              v-model="inputs.isInChurch"
-            />
-
-            <Input
-              type="dropdown"
-              v-if="inputs.isInChurch.value"
-              label="State of Residence"
-              validation="required"
-              :options="stateOptions"
-              v-model="inputs.stateOfResidence"
-            />
-
-            <Input
-              type="radio"
-              label="Personal Relationship"
-              validation="required"
-              :options="relationshipOptions"
-              v-model="inputs.relationship"
-            />
-
-            <b-button
-              class="submit-btn mt-3"
-              type="submit"
-              variant="darkShades"
-              size="lg"
-              :disabled="!isEnabled"
-            >
-              Calculate!
-            </b-button>
-
-          </form>
+          <InputForm @submitted="submitted" />
         </template>
       </Panel>
     </b-row>
@@ -72,53 +20,20 @@
 </template>
 <script>
 import Panel from "./components/Panel.vue";
-import Input from "./components/Input.vue";
+import InputForm from "./components/InputForm.vue";
 
 export default {
   name: "Home",
-  components: { Panel, Input },
+  components: { Panel, InputForm },
   data() {
     return {
-      inputs: {
-        incomeValue: "",
-        yearValue: "",
-        isInChurch: "",
-        stateOfResidence: "",
-        relationship: ""
-      },
-
-      churchtaxOptions: [
-        { label: "Yes", value: true },
-        { label: "No", value: false }
-      ],
-      yearOptions: ["2018"],
-      stateOptions: [
-        { label: "Bayern", value: "Bayern" },
-        {
-          label: "BadenWuerttemberg",
-          value: "BaWue"
-        },
-        { label: "Other", value: "Other" }
-      ],
-      relationshipOptions: [
-        { text: "married", value: "married" },
-        { text: "single", value: "single" }
-      ]
+      inputData: ""
     };
   },
-  computed: {
-    isEnabled: function() {
-      return !!Object.values(this.inputs).every(Boolean);
-    }
-  },
   methods: {
-    input: function(input) {
-      if (input.type === "input") {
-        this.incomeValue = input.value;
-      }
-    },
-    handleSubmit: function(submitEvent) {
-      console.log("This is our raw data:", this.inputs);
+    submitted: function(input) {
+      console.log(input);
+      this.inputData = input;
     }
   }
 };
@@ -127,12 +42,6 @@ export default {
 <style lang="scss">
 .row {
   padding: 0 15px;
-}
-
-.submit-btn {
-  font-weight: bold;
-  margin: 5px;
-  margin-top: 35px;
 }
 </style>
 
