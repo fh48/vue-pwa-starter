@@ -12,8 +12,15 @@
           class="form-body"
           slot="body"
         >
-          <InputForm @submitted="submitted" />
-
+          <InputForm
+            v-if="!resultsCalculated"
+            @submitted="submitted"
+          />
+          <Result
+            v-if="resultsCalculated"
+            :results="calculations"
+            @clearInputData="clearIncomeData"
+          />
         </template>
       </Panel>
     </b-row>
@@ -22,17 +29,24 @@
 <script>
 import Panel from "./components/Panel.vue";
 import InputForm from "./components/InputForm.vue";
+import Result from "./components/Result.vue";
 
 import { calcChurchTax, calcIncomeTax, calcSoli } from "./calc.js";
 
 export default {
   name: "Home",
-  components: { Panel, InputForm },
+  components: { Panel, InputForm, Result },
   data() {
     return {
       calculations: ""
     };
   },
+  computed: {
+    resultsCalculated: function() {
+      return Object.keys(this.calculations).length !== 0;
+    }
+  },
+
   methods: {
     submitted: function(input) {
       const incomeValue = parseInt(input.incomeValue);
@@ -43,19 +57,22 @@ export default {
       );
       const soli = calcSoli(incomeTax, input.relationship);
 
-      const churchtax = input.isInChurch
+      const churchTax = input.isInChurch
         ? calcChurchTax(incomeTax, input.stateOfResidence)
         : 0;
       const netIncome =
-        ((incomeValue - incomeTax - soli - churchtax) * 100) / 100;
+        ((incomeValue - incomeTax - soli - churchTax) * 100) / 100;
 
       this.calculations = {
         incomeValue,
         incomeTax,
         soli,
-        churchtax,
+        churchTax,
         netIncome
       };
+    },
+    clearIncomeData: function() {
+      this.calculations = "";
     }
   }
 };
