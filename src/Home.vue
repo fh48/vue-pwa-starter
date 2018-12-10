@@ -13,6 +13,7 @@
           slot="body"
         >
           <InputForm @submitted="submitted" />
+
         </template>
       </Panel>
     </b-row>
@@ -22,18 +23,39 @@
 import Panel from "./components/Panel.vue";
 import InputForm from "./components/InputForm.vue";
 
+import { calcChurchTax, calcIncomeTax, calcSoli } from "./calc.js";
+
 export default {
   name: "Home",
   components: { Panel, InputForm },
   data() {
     return {
-      inputData: ""
+      calculations: ""
     };
   },
   methods: {
     submitted: function(input) {
-      console.log(input);
-      this.inputData = input;
+      const incomeValue = parseInt(input.incomeValue);
+      const incomeTax = calcIncomeTax(
+        incomeValue,
+        incomeValue,
+        input.relationship
+      );
+      const soli = calcSoli(incomeTax, input.relationship);
+
+      const churchtax = input.isInChurch
+        ? calcChurchTax(incomeTax, input.stateOfResidence)
+        : 0;
+      const netIncome =
+        ((incomeValue - incomeTax - soli - churchtax) * 100) / 100;
+
+      this.calculations = {
+        incomeValue,
+        incomeTax,
+        soli,
+        churchtax,
+        netIncome
+      };
     }
   }
 };
